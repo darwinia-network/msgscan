@@ -73,3 +73,4 @@ end
 
 gem 'eth'
 gem 'scale_rb', '0.1.9'
+gem 'whenever', require: false
