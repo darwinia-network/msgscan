@@ -18,7 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-
+require "./#{File.dirname(__FILE__)}/environment.rb"
 env :PATH, ENV['PATH']
 every 1.minute do
   Blockchain.all.each do |chain|
