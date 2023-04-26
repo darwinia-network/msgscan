@@ -84,6 +84,11 @@ def scan_messaging_events_between(chain, from_block, to_block)
           raise "channel to #{chain.name}(id: #{chain.id}) not found for address: #{address}" if channel.nil?
 
           { channel_id: channel.id }.merge(data) if channel
+        when 'FailedMessage'
+          channel = chain.channel_to_it(address)
+          raise "channel to #{chain.name}(id: #{chain.id}) not found for address: #{address}" if channel.nil?
+
+          { channel_id: channel.id }.merge(data) if channel
         when 'MessagesDelivered'
           channel = chain.channel_from_it(address)
           raise "channel from #{chain.name}(id: #{chain.id}) not found for address: #{address}" if channel.nil?
@@ -104,6 +109,7 @@ end
 # 2. Darwinia
 #     contract: `Inboundlane`
 #     event: `event MessageDispatched(uint64 nonce, bool result);`
+# 3. Darwinia: FailedMessage
 # 3. Ethereum
 #     contract: `Outboundlane`
 #     event: `event MessagesDelivered(uint64 indexed begin, uint64 indexed end);`
@@ -147,6 +153,22 @@ def process_events(abi, log)
       dispatched_tx: tx_hash
     }
     yield(log['address'], event_name, message)
+  when abi.failed_message_event_topic
+    event_name = abi.failed_message_event_interface['name']
+    Rails.logger.info "[track] #{event_name}"
+
+    _, args =
+      Abi::Event.decode_log(
+        abi.dispatched_event_interface['inputs'],
+        log['data'],
+        log['topics']
+      )
+    message = {
+      nonce: args[:nonce],
+      dispatch_error: args[:reason],
+      data: args[:message]
+    }
+    yield(log['address'], event_name, message)
   when abi.delivered_event_topic
     event_name = abi.delivered_event_interface['name']
     Rails.logger.info "[track] #{event_name}"
@@ -180,21 +202,24 @@ class MessagingAbi
     @abi = JSON.parse File.read(abi_file_path)
     @accepted_event_interface = find_event_interface 'MessageAccepted'
     @dispatched_event_interface = find_event_interface 'MessageDispatched'
+    @failed_message_event_interface = find_event_interface 'FailedMessage'
     @delivered_event_interface = find_event_interface 'MessagesDelivered'
+
     if @accepted_event_interface.nil? || @dispatched_event_interface.nil? || @delivered_event_interface.nil?
       raise 'invalid abi file'
     end
 
     @accepted_event_topic = Abi::Event.compute_topic(@accepted_event_interface)
     @dispatched_event_topic = Abi::Event.compute_topic(@dispatched_event_interface)
+    @failed_message_event_topic = Abi::Event.compute_topic(@failed_message_event_interface)
     @delivered_event_topic = Abi::Event.compute_topic(@delivered_event_interface)
   end
 
-  attr_reader :accepted_event_interface, :dispatched_event_interface, :delivered_event_interface,
-              :accepted_event_topic, :dispatched_event_topic, :delivered_event_topic
+  attr_reader :accepted_event_interface, :dispatched_event_interface, :failed_message_event_interface, :delivered_event_interface,
+              :accepted_event_topic, :dispatched_event_topic, :failed_message_event_topic, :delivered_event_topic
 
   def event_topics
-    [@accepted_event_topic, @dispatched_event_topic, @delivered_event_topic]
+    [@accepted_event_topic, @dispatched_event_topic, @failed_message_event_topic, @delivered_event_topic]
   end
 
   private
