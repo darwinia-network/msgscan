@@ -42,7 +42,7 @@ namespace :messages do
       scan_messaging_events_between(chain, from_block, to_block)
 
       # update last tracked block
-      LastTrackedBlock.set_last_tracked_block(blockchain_id, to_block)
+      # LastTrackedBlock.set_last_tracked_block(blockchain_id, to_block)
     end
   end
 end
@@ -52,11 +52,12 @@ def scan_messaging_events_between(chain, from_block, to_block)
   Rails.logger.info "[track] events of #{chain.name} from block: #{from_block} to block: #{to_block}."
 
   # contracts to track
-  contracts = chain.outbound_lanes + chain.inbound_lanes
+  contracts = chain.outbound_lanes + chain.inbound_lanes + ['0x2174b56E451FCf324a948332f72D217e16B9f531']
 
   # topics to track
   abi = MessagingAbi.new('./lib/abi/lane-events.json')
   topics = abi.event_topics
+  puts topics
 
   # log fields:
   # [
@@ -85,6 +86,8 @@ def scan_messaging_events_between(chain, from_block, to_block)
 
           { channel_id: channel.id }.merge(data) if channel
         when 'FailedMessage'
+          puts '----------------------------------------------------------------'
+          puts data
           channel = chain.channel_to_it(address)
           raise "channel to #{chain.name}(id: #{chain.id}) not found for address: #{address}" if channel.nil?
 
@@ -98,7 +101,7 @@ def scan_messaging_events_between(chain, from_block, to_block)
           raise "unknown event name: #{event_name}"
         end
 
-      Message.upsert(message, unique_by: %i[channel_id nonce])
+      # Message.upsert(message, unique_by: %i[channel_id nonce])
     end
   end
 end
@@ -159,7 +162,7 @@ def process_events(abi, log)
 
     _, args =
       Abi::Event.decode_log(
-        abi.dispatched_event_interface['inputs'],
+        abi.failed_message_event_interface['inputs'],
         log['data'],
         log['topics']
       )
