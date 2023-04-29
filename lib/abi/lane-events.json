@@ -74,29 +74,60 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "fromDappAddress",
+        "name": "_fromDappAddress",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "toDappAddress",
+        "name": "_toDappAddress",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "bytes",
-        "name": "message",
+        "name": "_message",
         "type": "bytes"
       },
       {
         "indexed": false,
         "internalType": "string",
-        "name": "reason",
+        "name": "_reason",
         "type": "string"
       }
     ],
-    "name": "FailedMessage",
+    "name": "DappErrCatched",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_fromDappAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_toDappAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "_message",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "DappErrCatchedBytes",
     "type": "event"
   }
 ]

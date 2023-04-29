@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nonce: 1
+  status: 1
+  src_blockchain_id: 1
+  dst_blockchain_id: MyString
+  sent_at: 2023-04-27 01:02:11
+  sent_at_event_id: 1
+  executed_at: 2023-04-27 01:02:11
+  executed_at_event_id: 1
+  execution_error: MyText
+  from_dapp: MyString
+  to_dapp: MyString
+  payload: MyText
+
+two:
+  nonce: 1
+  status: 1
+  src_blockchain_id: 1
+  dst_blockchain_id: MyString
+  sent_at: 2023-04-27 01:02:11
+  sent_at_event_id: 1
+  executed_at: 2023-04-27 01:02:11
+  executed_at_event_id: 1
+  execution_error: MyText
+  from_dapp: MyString
+  to_dapp: MyString
+  payload: MyText
