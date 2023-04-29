@@ -1,62 +1,113 @@
 class EvmLcmpLog < ApplicationRecord
-  has_one :cross_chain_message_sent, as: :sent_at_event
-  has_one :cross_chain_message_executed, as: :executed_at_event
   belongs_to :blockchain
-
-  enum :direction, { out: 0, in: 1 }, prefix: true
+  has_one :event, as: :event_source
 
   after_create :process_log
 
   def process_log
+    channel = EvmLcmpLane.get_channel(blockchain_id, address)
+    event = Event.create event_source_type: 'EvmLcmpLog', event_source_id: id
+
     case event_name
     when 'MessageAccepted'
-      process_message_accepted
+      process_message_accepted(channel, event)
     when 'MessageDispatched'
-      # process_message_dispatched
+      process_message_dispatched(channel, event)
     when 'DappErrCatched'
-      # process_dapp_err_catched
+      process_dapp_err_catched(channel, event)
     when 'DappErrCatchedBytes'
-      # process_dapp_err_catched_bytes
+      process_dapp_err_catched_bytes(channel, event)
     when 'MessageDelivered'
-      # process_message_delivered
+      process_message_delivered(channel, event)
     end
   end
 
-  def process_message_accepted
-    result = CrossChainMessage.create(
+  def process_message_accepted(channel, event)
+    CrossChainMessage.upsert(
       {
         src_blockchain_id: blockchain_id,
-        dst_blockchain_id: counterpart_blockchain_id,
+        dst_blockchain_id: channel.get_peer_blockchain_id(blockchain_id),
         nonce: args['nonce'],
         sent_at: log_at,
-        sent_at_event: self,
+        sent_at_event: event,
         from_dapp: args['source'],
         to_dapp: args['target'],
-        payload: args['encoded']
-      }
+        payload: args['encoded'], # TODO: decode the real message
+        channel_id: channel.id
+      },
+      unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
-    raise result.errors.full_messages.to_sentence unless result.errors.empty?
-
-    update cross_chain_message_id: result.id
   end
 
-  # def process_message_dispatched
-  #   result = CrossChainMessage.find_by(
-  #     {
-  #       src_blockchain_id: counterpart_blockchain_id,
-  #       dst_blockchain_id: blockchain_id,
-  #       nonce: args['nonce']
-  #     }
-  #   )
-  #   if result.nil?
-  #   else
-  #   end
+  def process_message_dispatched(channel, event)
+    CrossChainMessage.upsert(
+      {
+        src_blockchain_id: channel.get_peer_blockchain_id(blockchain_id),
+        dst_blockchain_id: blockchain_id,
+        channel_id: channel.id,
+        nonce: args['nonce'],
+        executed_at: log_at,
+        executed_at_event: event
+      },
+      unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
+    )
+  end
 
-  #   result.update(
-  #     {
-  #       dispatched_at: log_at,
-  #       dispatched_at_event: self
-  #     }
-  #   )
-  # end
+  def process_dapp_err_catched(channel, event)
+    dispatched_log = EvmLcmpLog.find_by(event_name: 'MessageDispatched', transaction_hash:)
+    return unless dispatched_log
+
+    CrossChainMessage.upsert(
+      {
+        src_blockchain_id: channel.get_peer_blockchain_id(blockchain_id),
+        dst_blockchain_id: blockchain_id,
+        channel_id: channel.id,
+        nonce: dispatched_log.args['nonce'],
+        execution_error: args['_reason'],
+        execution_error_event: event
+      },
+      unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
+    )
+  end
+
+  def process_dapp_err_catched_bytes(channel, event)
+    dispatched_log = EvmLcmpLog.find_by(event_name: 'MessageDispatched', transaction_hash:)
+    return unless dispatched_log
+
+    # convert binary reason to hex
+    reason = args['_reason']
+    reason = Util.bin_to_hex(reason) if reason.instance_of?(String) && reason.encoding == Encoding::ASCII_8BIT
+
+    CrossChainMessage.upsert(
+      {
+        src_blockchain_id: channel.get_peer_blockchain_id(blockchain_id),
+        dst_blockchain_id: blockchain_id,
+        channel_id: channel.id,
+        nonce: dispatched_log.args['nonce'],
+        execution_error: reason,
+        execution_error_event: event
+      },
+      unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
+    )
+  end
+
+  def process_message_delivered(channel, _event)
+    nonce_begin = args['begin']
+    nonce_end = args['end']
+
+    peer_blockchain_id = channel.get_peer_blockchain_id(blockchain_id)
+    (nonce_begin..nonce_end).each do |nonce|
+      CrossChainMessage.upsert(
+        {
+          src_blockchain_id: peer_blockchain_id,
+          dst_blockchain_id: blockchain_id,
+          channel_id: channel.id,
+          nonce:,
+          confirmed_at: log_at,
+          confirmed_at_event: event
+        },
+        unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
+      )
+    end
+  end
 end

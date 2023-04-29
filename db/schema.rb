@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_29_061721) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_29_150459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,13 +48,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_061721) do
     t.integer "status"
     t.datetime "sent_at", precision: nil
     t.integer "sent_at_event_id"
-    t.string "sent_at_event_type"
     t.datetime "executed_at", precision: nil
     t.integer "executed_at_event_id"
-    t.string "executed_at_event_type"
     t.text "execution_error"
     t.integer "execution_error_event_id"
-    t.string "execution_error_event_type"
     t.string "from_dapp"
     t.string "to_dapp"
     t.text "payload"
@@ -62,7 +59,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_061721) do
     t.datetime "updated_at", null: false
     t.integer "dst_blockchain_id"
     t.integer "channel_id"
-    t.index ["sent_at_event_type", "sent_at_event_id"], name: "index_cross_chain_messages_on_sent_at_event"
+    t.datetime "confirmed_at", precision: nil
+    t.integer "confirmed_at_event_id"
+    t.index ["src_blockchain_id", "dst_blockchain_id", "channel_id", "nonce"], name: "index_cross_chain_messages_on_src_and_dst_and_ch_and_nonce", unique: true
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "event_source_type"
+    t.integer "event_source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "evm_lcmp_lanes", force: :cascade do |t|
@@ -84,7 +90,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_061721) do
     t.integer "transaction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "cross_chain_message_id"
     t.string "block_hash"
     t.integer "transaction_index"
     t.integer "log_index"
@@ -92,8 +97,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_061721) do
     t.string "event_name"
     t.json "args"
     t.datetime "log_at", precision: nil
-    t.integer "counterpart_blockchain_id"
-    t.integer "direction", comment: "0: out, 1: in"
   end
 
   create_table "lanes", force: :cascade do |t|

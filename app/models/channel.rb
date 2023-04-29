@@ -7,4 +7,12 @@ class Channel < ApplicationRecord
   def channel_name
     "##{id}-#{channelable_type}-#{src_blockchain.name}-#{dst_blockchain.name}"
   end
+
+  def get_peer_blockchain_id(blockchain_id)
+    if src_blockchain_id == blockchain_id
+      dst_blockchain_id
+    elsif dst_blockchain_id == blockchain_id
+      src_blockchain_id
+    end
+  end
 end

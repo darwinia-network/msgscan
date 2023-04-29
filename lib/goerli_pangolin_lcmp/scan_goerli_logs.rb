@@ -13,10 +13,12 @@ contracts = %w[
   0x9B5010d562dDF969fbb85bC72222919B699b5F54
   0x0F6e081B1054c59559Cf162e82503F3f560cA4AF
 ]
-goerli_blockchain_id = 1 # goerli
+
+goerli = Blockchain.find_by_name('goerli')
+goerli_blockchain_id = goerli.id
 pangolin_blockchain_id = 2 # pangolin
-channel_g_p = Channel.find(1)
-channel_p_g = Channel.find(2)
+channel_g_p = goerli.channels_from_it.first
+channel_p_g = goerli.channels_to_it.first
 
 scan_logs(
   'https://eth-goerli.g.alchemy.com/v2/hYlUsCk2XySXBkX_VHd5drH73YWQEfgy',
@@ -28,6 +30,7 @@ scan_logs(
   begin
     log['blockchain_id'] = goerli_blockchain_id
     log['counterpart_blockchain_id'] = pangolin_blockchain_id
+
     case log['event_name']
     when 'MessageAccepted'
       log['direction'] = EvmLcmpLog.directions[:out]
@@ -41,7 +44,7 @@ scan_logs(
       log['direction'] = EvmLcmpLog.directions[:out]
     end
     p log
-    EvmLog.create log
+    EvmLcmpLog.create log
   rescue StandardError => e
     puts e
     puts e.backtrace
