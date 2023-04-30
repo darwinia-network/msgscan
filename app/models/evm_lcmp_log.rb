@@ -26,9 +26,9 @@ class EvmLcmpLog < ApplicationRecord
     when 'DappErrCatchedBytes'
       puts 'DappErrCatchedBytes'
       process_dapp_err_catched_bytes(channel, event)
-    when 'MessageDelivered'
-      puts 'MessageDelivered'
-      process_message_delivered(channel, event)
+    when 'MessagesDelivered'
+      puts 'MessagesDelivered'
+      process_messages_delivered(channel, event)
     end
   end
 
@@ -109,7 +109,7 @@ class EvmLcmpLog < ApplicationRecord
     event.update cross_chain_message_id: result.first['id']
   end
 
-  def process_message_delivered(channel, event)
+  def process_messages_delivered(channel, event)
     nonce_begin = args['begin']
     nonce_end = args['end']
 
@@ -117,8 +117,8 @@ class EvmLcmpLog < ApplicationRecord
     (nonce_begin..nonce_end).each do |nonce|
       CrossChainMessage.upsert(
         {
-          src_blockchain_id: peer_blockchain_id,
-          dst_blockchain_id: blockchain_id,
+          src_blockchain_id: blockchain_id,
+          dst_blockchain_id: peer_blockchain_id,
           channel_id: channel.id,
           nonce:,
           confirmed_at: log_at,
