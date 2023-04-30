@@ -15,7 +15,6 @@ contracts = %w[
 ]
 
 goerli = Blockchain.find_by_name('goerli')
-goerli_blockchain_id = goerli.id
 pangolin_blockchain_id = 2 # pangolin
 channel_g_p = goerli.channels_from_it.first
 channel_p_g = goerli.channels_to_it.first
@@ -27,28 +26,14 @@ scan_logs(
   contracts,
   abi
 ) do |log|
-  begin
-    log['blockchain_id'] = goerli_blockchain_id
-    log['counterpart_blockchain_id'] = pangolin_blockchain_id
-
-    case log['event_name']
-    when 'MessageAccepted'
-      log['direction'] = EvmLcmpLog.directions[:out]
-    when 'MessageDispatched'
-      log['direction'] = EvmLcmpLog.directions[:in]
-    when 'DappErrCatched'
-      log['direction'] = EvmLcmpLog.directions[:in]
-    when 'DappErrCatchedBytes'
-      log['direction'] = EvmLcmpLog.directions[:in]
-    when 'MessageDelivered'
-      log['direction'] = EvmLcmpLog.directions[:out]
-    end
-    p log
-    EvmLcmpLog.create log
-  rescue StandardError => e
-    puts e
-    puts e.backtrace
-  end
-
-  exit
+  log['blockchain_id'] = goerli.id
+  # check if log exists
+  # if yes, update. if no, insert
+  existed_log =
+    EvmLcmpLog.find_by blockchain_id: log['blockchain_id'],
+                       block_number: log['block_number'],
+                       transaction_index: log['transaction_index'],
+                       log_index: log['log_index']
+  puts existed_log
+  EvmLcmpLog.create! log unless existed_log
 end

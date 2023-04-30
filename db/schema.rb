@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_29_150459) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_30_054921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_150459) do
     t.integer "event_source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cross_chain_message_id"
+    t.index ["event_source_type", "event_source_id"], name: "index_events_on_event_source_type_and_event_source_id", unique: true
   end
 
   create_table "evm_lcmp_lanes", force: :cascade do |t|
@@ -97,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_29_150459) do
     t.string "event_name"
     t.json "args"
     t.datetime "log_at", precision: nil
+    t.index ["blockchain_id", "block_number", "transaction_index", "log_index"], name: "index_evm_lcmp_logs_on_4_columns", unique: true
   end
 
   create_table "lanes", force: :cascade do |t|
