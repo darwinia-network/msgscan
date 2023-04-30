@@ -1,1 +1,24 @@
+
 @import "bootstrap.min.css";
+$pagination-border-width: 0;
+
+
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+}
+
+.pagination>li>a, .pagination>li>span {
+  border-width: 0;
+  border-radius: 0;
+}
+
+.page-item:first-child .page-link {
+  border-width: 0;
+  border-radius: 0;
+}
+
+.page-item:last-child .page-link {
+  border-width: 0;
+  border-radius: 0;
+}

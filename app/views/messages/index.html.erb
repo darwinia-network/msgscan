@@ -1,23 +1,29 @@
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">#</th>
+      <th scope="col">Channel</th>
       <th scope="col">Nonce</th>
-      <th scope="col">Direction</th>
-      <th scope="col">Accepted At</th>
-      <th scope="col">Dispatched At</th>
-      <th scope="col">Delivered At</th>
+      <th scope="col">Status</th>
+      <th scope="col">Sent At</th>
+      <th scope="col">Executed At</th>
+      <th scope="col">Err</th>
+      <th scope="col">Confirmed At</th>
     </tr>
   </thead>
   <tbody class="lh-copy">
     <% @messages.each do |message| %>
       <tr h2>
+        <td ><%= message.id %></td>
+        <td ><%= message.channel.name %></td>
         <td scope="row"><%= message.nonce %></td>
-        <td ><%= message.channel.direction %></td>
-        <td ><%= message.accepted_at %></td>
-        <td ><%= message.dispatched_at %></td>
-        <td ><%= message.delivered_at %></td>
+        <td ><%= message.status_bar %></td>
+        <td ><%= message.sent_at %></td>
+        <td ><%= message.executed_at %></td>
+        <td ><%= message.execution_error %></td>
+        <td ><%= message.confirmed_at %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= paginate @messages %>
+<%= paginate @messages, theme: 'bootstrap-5' %>

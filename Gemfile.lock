@@ -75,6 +75,9 @@ GEM
       thermite (~> 0)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
+    bootstrap5-kaminari-views (0.0.1)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     builder (3.2.4)
     capybara (3.39.0)
       addressable
@@ -270,6 +273,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
+  bootstrap5-kaminari-views
   capybara
   debug
   eth

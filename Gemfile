@@ -71,6 +71,7 @@ group :test do
   gem 'webdrivers'
 end
 
+gem 'bootstrap5-kaminari-views'
 gem 'eth'
 gem 'kaminari'
 gem 'scale_rb', '0.1.9'

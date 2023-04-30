@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
   def index
-    @messages = Message.order(nonce: :desc).page(params[:page])
+    @messages = CrossChainMessage.order(sent_at: :desc).page(params[:page])
   end
 end

@@ -10,4 +10,11 @@ class CrossChainMessage < ApplicationRecord
   belongs_to :channel
 
   has_many :events
+
+  def status_bar
+    first = sent_at.nil? ? '◽' : '◾'
+    second = executed_at.nil? ? '◽' : '◾'
+    third = confirmed_at.nil? ? '◽' : '◾'
+    first + second + third
+  end
 end
