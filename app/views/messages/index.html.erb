@@ -25,7 +25,7 @@
         <td ><%= src_tx_link(message) %></td>
         <td ><%= dst_tx_link(message) %></td>
         <td ><%= message.sent_at.strftime("%F %T") %></td>
-        <td ><%= message.block_number %></td>
+        <td ><%= block_number_link(message) %></td>
       </tr>
     <% end %>
   </tbody>

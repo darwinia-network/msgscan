@@ -22,4 +22,8 @@ class Blockchain < ApplicationRecord
   def explorer_tx_url(tx_hash)
     explorer.gsub(':tx_hash', tx_hash)
   end
+
+  def get_explorer_block_url(block_number)
+    explorer_block_url&.gsub(':block_number', block_number.to_s)
+  end
 end
