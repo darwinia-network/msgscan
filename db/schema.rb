@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_01_091120) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_01_092911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_091120) do
     t.datetime "updated_at", null: false
     t.integer "channelable_id"
     t.string "channelable_type"
+  end
+
+  create_table "cross_chain_message_events", force: :cascade do |t|
+    t.integer "cross_chain_message_id"
+    t.integer "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cross_chain_messages", force: :cascade do |t|
@@ -59,7 +66,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_091120) do
     t.integer "event_source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "cross_chain_message_id"
     t.index ["event_source_type", "event_source_id"], name: "index_events_on_event_source_type_and_event_source_id", unique: true
   end
 

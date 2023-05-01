@@ -59,7 +59,7 @@ class EvmLcmpLog < ApplicationRecord
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
 
-    event.update cross_chain_message_id: result.first['id']
+    CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
   end
 
   def process_message_dispatched(channel, event)
@@ -75,7 +75,7 @@ class EvmLcmpLog < ApplicationRecord
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
 
-    event.update cross_chain_message_id: result.first['id']
+    CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
   end
 
   def process_dapp_err_catched(channel, event)
@@ -94,7 +94,7 @@ class EvmLcmpLog < ApplicationRecord
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
 
-    event.update cross_chain_message_id: result.first['id']
+    CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
   end
 
   def process_dapp_err_catched_bytes(channel, event)
@@ -117,7 +117,7 @@ class EvmLcmpLog < ApplicationRecord
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
 
-    event.update cross_chain_message_id: result.first['id']
+    CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
   end
 
   def process_messages_delivered(channel, event)
@@ -126,7 +126,7 @@ class EvmLcmpLog < ApplicationRecord
 
     peer_blockchain_id = channel.get_peer_blockchain_id(blockchain_id)
     (nonce_begin..nonce_end).each do |nonce|
-      CrossChainMessage.upsert(
+      result = CrossChainMessage.upsert(
         {
           src_blockchain_id: blockchain_id,
           dst_blockchain_id: peer_blockchain_id,
@@ -137,6 +137,8 @@ class EvmLcmpLog < ApplicationRecord
         },
         unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
       )
+
+      CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
     end
   end
 end

@@ -7,30 +7,6 @@ require_relative '../utils'
 require_relative '../evm/scan_logs'
 require_relative '../../config/environment'
 
-def scan_logs_loop(blockchain, contracts, abi)
-  loop do
-    from, to = blockchain.last_tracked_block.reload.get_next_block_range
-    if from >= to
-      puts 'no new blocks, sleep 30s'
-      sleep 30
-      next
-    end
-    p "scan logs from block: #{from}, to block: #{to}"
-
-    scan_logs(blockchain.rpc, from, to, contracts, abi) do |log|
-      # p log
-      log['blockchain_id'] = blockchain.id
-      EvmLcmpLog.create!(log) unless EvmLcmpLog.exists?(log)
-    end
-
-    blockchain.set_last_tracked_block(to)
-  rescue StandardError => e
-    puts e
-    puts e.backtrace
-    sleep 30
-  end
-end
-
 abi = EventsAbi.new('./lib/abi/lane-events.json')
 
 contracts = %w[

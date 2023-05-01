@@ -5,28 +5,26 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">From</th>
       <th scope="col">To</th>
       <th scope="col">Nonce</th>
       <th scope="col">Status</th>
       <th scope="col">Src Tx</th>
       <th scope="col">Dst Tx</th>
-      <th scope="col">Sent At</th>
+      <th scope="col">Sent At(UTC)</th>
       <th scope="col">Block</th>
     </tr>
   </thead>
   <tbody class="lh-copy">
     <% @messages.each do |message| %>
       <tr h2>
-        <td ><%= message.id %></td>
         <td ><%= message.src_chain.name %></td>
         <td ><%= message.dst_chain.name %></td>
         <td scope="row"><%= message.nonce %></td>
         <td ><%= message.status_bar %></td>
         <td ><%= src_tx_link(message) %></td>
         <td ><%= dst_tx_link(message) %></td>
-        <td ><%= message.sent_at %></td>
+        <td ><%= message.sent_at.strftime("%F %T") %></td>
         <td ><%= message.block_number %></td>
       </tr>
     <% end %>

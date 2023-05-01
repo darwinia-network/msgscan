@@ -15,23 +15,5 @@ contracts = %w[
 ]
 
 goerli = Blockchain.find_by_name('goerli')
-from_block, to_block = goerli.last_tracked_block.get_next_block_range
 
-scan_logs(
-  'https://eth-goerli.g.alchemy.com/v2/hYlUsCk2XySXBkX_VHd5drH73YWQEfgy',
-  from_block,
-  to_block,
-  contracts,
-  abi
-) do |log|
-  log['blockchain_id'] = goerli.id
-  # check if log exists
-  # if yes, update. if no, insert
-  existed_log =
-    EvmLcmpLog.find_by blockchain_id: log['blockchain_id'],
-                       block_number: log['block_number'],
-                       transaction_index: log['transaction_index'],
-                       log_index: log['log_index']
-  puts existed_log
-  EvmLcmpLog.create! log unless existed_log
-end
+scan_logs_loop(goerli, contracts, abi)

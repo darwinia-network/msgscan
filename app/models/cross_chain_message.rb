@@ -9,7 +9,8 @@ class CrossChainMessage < ApplicationRecord
 
   belongs_to :channel
 
-  has_many :events
+  has_many :cross_chain_message_events
+  has_many :events, through: :cross_chain_message_events
 
   delegate :block_number, to: :sent_at_event, allow_nil: true
 
