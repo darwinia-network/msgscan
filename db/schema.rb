@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_30_124359) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_01_091120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,16 +30,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_124359) do
     t.datetime "updated_at", null: false
     t.integer "channelable_id"
     t.string "channelable_type"
-  end
-
-  create_table "contracts", force: :cascade do |t|
-    t.string "address"
-    t.string "name"
-    t.integer "lane_id"
-    t.integer "blockchain_id"
-    t.json "events_interface"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "cross_chain_messages", force: :cascade do |t|
@@ -102,40 +92,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_124359) do
     t.index ["blockchain_id", "block_number", "transaction_index", "log_index"], name: "index_evm_lcmp_logs_on_4_columns", unique: true
   end
 
-  create_table "lanes", force: :cascade do |t|
-    t.integer "src_blockchain_id"
-    t.integer "dst_blockchain_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "last_tracked_blocks", force: :cascade do |t|
     t.integer "blockchain_id"
     t.integer "last_tracked_block", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["blockchain_id"], name: "index_last_tracked_blocks_on_blockchain_id", unique: true
-  end
-
-  create_table "messages", force: :cascade do |t|
-    t.integer "channel_id"
-    t.integer "nonce"
-    t.integer "status"
-    t.datetime "accepted_at", precision: nil
-    t.string "accepted_tx"
-    t.datetime "dispatched_at", precision: nil
-    t.string "dispatch_error"
-    t.string "dispatched_tx"
-    t.datetime "delivered_at", precision: nil
-    t.string "delivered_tx"
-    t.string "from_dapp"
-    t.string "to_dapp"
-    t.text "payload"
-    t.text "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "block_number"
-    t.index ["channel_id", "nonce"], name: "index_messages_on_channel_id_and_nonce", unique: true
   end
 
 end
