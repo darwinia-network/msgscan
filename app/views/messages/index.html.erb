@@ -1,29 +1,37 @@
+<div class="input-group mb-4">
+  <input class="form-control" aria-label="Source Transaction Hash" aria-describedby="button-addon2" type="text" placeholder="tx hash">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+</div>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Channel</th>
+      <th scope="col">From</th>
+      <th scope="col">To</th>
       <th scope="col">Nonce</th>
       <th scope="col">Status</th>
+      <th scope="col">Src Tx</th>
+      <th scope="col">Dst Tx</th>
       <th scope="col">Sent At</th>
-      <th scope="col">Executed At</th>
-      <th scope="col">Err</th>
-      <th scope="col">Confirmed At</th>
+      <th scope="col">Block</th>
     </tr>
   </thead>
   <tbody class="lh-copy">
     <% @messages.each do |message| %>
       <tr h2>
         <td ><%= message.id %></td>
-        <td ><%= message.channel.name %></td>
+        <td ><%= message.src_chain.name %></td>
+        <td ><%= message.dst_chain.name %></td>
         <td scope="row"><%= message.nonce %></td>
         <td ><%= message.status_bar %></td>
+        <td ><%= src_tx_link(message) %></td>
+        <td ><%= dst_tx_link(message) %></td>
         <td ><%= message.sent_at %></td>
-        <td ><%= message.executed_at %></td>
-        <td ><%= message.execution_error %></td>
-        <td ><%= message.confirmed_at %></td>
+        <td ><%= message.block_number %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= paginate @messages, theme: 'bootstrap-5' %>
+<div class="mt-4">
+  <%= paginate @messages, theme: 'bootstrap-5' %>
+</div>

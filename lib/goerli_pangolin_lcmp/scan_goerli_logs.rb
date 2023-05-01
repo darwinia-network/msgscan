@@ -15,14 +15,12 @@ contracts = %w[
 ]
 
 goerli = Blockchain.find_by_name('goerli')
-pangolin_blockchain_id = 2 # pangolin
-channel_g_p = goerli.channels_from_it.first
-channel_p_g = goerli.channels_to_it.first
+from_block, to_block = goerli.last_tracked_block.get_next_block_range
 
 scan_logs(
   'https://eth-goerli.g.alchemy.com/v2/hYlUsCk2XySXBkX_VHd5drH73YWQEfgy',
-  0,
-  8_900_814,
+  from_block,
+  to_block,
   contracts,
   abi
 ) do |log|

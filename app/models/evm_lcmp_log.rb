@@ -4,6 +4,17 @@ class EvmLcmpLog < ApplicationRecord
 
   after_create :process_log
 
+  def self.exists?(log)
+    EvmLcmpLog.find_by(
+      {
+        blockchain_id: log['blockchain_id'],
+        block_number: log['block_number'],
+        transaction_index: log['transaction_index'],
+        log_index: log['log_index']
+      }
+    ).present?
+  end
+
   def process_log
     # channel config for this log
     channel = EvmLcmpLane.get_channel(blockchain_id, address)

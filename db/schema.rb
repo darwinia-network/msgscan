@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_30_054921) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_30_124359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,7 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_30_054921) do
 
   create_table "last_tracked_blocks", force: :cascade do |t|
     t.integer "blockchain_id"
-    t.integer "last_tracked_block"
+    t.integer "last_tracked_block", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["blockchain_id"], name: "index_last_tracked_blocks_on_blockchain_id", unique: true

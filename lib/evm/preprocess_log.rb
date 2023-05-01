@@ -30,9 +30,14 @@ def preprocess_log(helper, abi, log)
   log['args'].transform_keys!(&:to_s)
 
   # convert keys to snake case
-  log.transform_keys do |k|
+  log.transform_keys! do |k|
     snake_case(k)
   end
+
+  # remove transaction_log_index, darwinia chain doesn't have this field
+  log.delete('transaction_log_index')
+
+  log
 end
 
 def get_interface(log, abi)
