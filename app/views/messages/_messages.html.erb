@@ -1,0 +1,19 @@
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Time(UTC)</th>
+      <th scope="col">Block</th>
+      <th scope="col">From</th>
+      <th scope="col">To</th>
+      <th scope="col">Nonce</th>
+      <th scope="col">Status</th>
+      <th scope="col">Src Tx</th>
+      <th scope="col">Dst Tx</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <% messages.each do |message| %>
+      <%= render 'messages/message', message: message %>
+    <% end %>
+  </tbody>
+</table>

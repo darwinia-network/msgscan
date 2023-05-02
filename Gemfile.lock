@@ -202,6 +202,7 @@ GEM
       mini_portile2 (~> 2.8)
       pkg-config (~> 1.5)
       rubyzip (~> 2.3)
+    redis (4.8.1)
     regexp_parser (2.8.0)
     reline (0.3.3)
       io-console (~> 0.5)
@@ -283,6 +284,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
+  redis (~> 4.0)
   sassc-rails
   scale_rb (= 0.1.9)
   selenium-webdriver

@@ -59,7 +59,10 @@ class EvmLcmpLog < ApplicationRecord
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )
 
-    CrossChainMessageEvent.create(cross_chain_message_id: result.first['id'], event_id: event.id)
+    message = CrossChainMessage.find(result.first['id'])
+    CrossChainMessageEvent.create(cross_chain_message_id: message.id, event_id: event.id)
+
+    CrossChainMessage.broadcast_to_frontend
   end
 
   def process_message_dispatched(channel, event)

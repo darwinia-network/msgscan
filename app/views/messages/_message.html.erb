@@ -1,0 +1,10 @@
+<tr id="message_<%= message.id %>">
+  <th scope="row"><%= message.sent_at.strftime("%F %T") %></th>
+  <td ><%= block_number_link(message) %></td>
+  <td ><%= message.src_chain.name %></td>
+  <td ><%= message.dst_chain.name %></td>
+  <td ><%= message.nonce %></td>
+  <td ><%= message.status_bar %></td>
+  <td ><%= src_tx_link(message) %></td>
+  <td ><%= dst_tx_link(message) %></td>
+</tr>

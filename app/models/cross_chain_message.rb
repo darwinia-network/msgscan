@@ -28,4 +28,16 @@ class CrossChainMessage < ApplicationRecord
   def dst_tx_hash
     executed_at_event&.transaction_hash
   end
+
+  def self.latest_messages(limit = 16)
+    CrossChainMessage.order(sent_at: :desc).limit(limit)
+  end
+
+  def self.broadcast_to_frontend
+    broadcast_update_to(
+      'messages', partial: 'messages/messages',
+                  locals: { messages: latest_messages },
+                  target: 'messages'
+    )
+  end
 end
