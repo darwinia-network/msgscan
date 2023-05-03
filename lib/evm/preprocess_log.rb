@@ -23,7 +23,7 @@ def preprocess_log(helper, abi, log)
 
   # convert binary to hex
   log['args'].each do |k, v|
-    log['args'][k] = Util.bin_to_hex(v) if v.instance_of?(String) && v.encoding == Encoding::ASCII_8BIT
+    log['args'][k] = "0x#{Util.bin_to_hex(v)}" if v.instance_of?(String) && v.encoding == Encoding::ASCII_8BIT
   end
 
   # unify keys
