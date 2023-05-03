@@ -1,0 +1,13 @@
+<ul class="list-group list-group-flush">
+  <% @message.attributes.each do |key, value| %>
+    <li class="list-group-item">
+      <%= key %>: 
+      <div class="text-break" style="font-family: 'Roboto Mono', monospace;"><%= value %></div>
+    </li>
+  <% end %>
+  <%# <li class="list-group-item">An item</li>
+  <li class="list-group-item">A second item</li>
+  <li class="list-group-item">A third item</li>
+  <li class="list-group-item">A fourth item</li>
+  <li class="list-group-item">And a fifth one</li> %>
+</ul>

@@ -1,5 +1,6 @@
-<tr id="message_<%= message.id %>">
-  <th scope="row"><%= message.sent_at.strftime("%F %T") %></th>
+<tr id="message_<%= message.id %>" class="position-relative">
+  <th scope="row"><%= link_to message.id, message_path(message.id), class: "stretched-link", data: { turbo: false } %></th>
+  <td ><%= message.sent_at.strftime("%F %T") %></td>
   <td ><%= block_number_link(message) %></td>
   <td ><%= message.src_chain.name %></td>
   <td ><%= message.dst_chain.name %></td>
