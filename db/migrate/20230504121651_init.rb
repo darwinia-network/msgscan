@@ -1,4 +1,5 @@
 class Init < ActiveRecord::Migration[7.0]
+  # https://stackoverflow.com/questions/3343534/rebase-rails-migrations-in-a-long-running-project
   def up
     create_table "blockchains", force: :cascade do |t|
       t.string "name"

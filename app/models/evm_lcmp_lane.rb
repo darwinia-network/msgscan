@@ -1,4 +1,6 @@
 class EvmLcmpLane < ApplicationRecord
+  belongs_to :src_blockchain, class_name: 'Blockchain', foreign_key: 'src_blockchain_id'
+  belongs_to :dst_blockchain, class_name: 'Blockchain', foreign_key: 'dst_blockchain_id'
   validates :outbound_lane_address, uniqueness: { scope: :src_blockchain_id }
   validates :inbound_lane_address, uniqueness: { scope: :dst_blockchain_id }
 

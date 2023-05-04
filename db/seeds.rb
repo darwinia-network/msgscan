@@ -21,17 +21,36 @@ blockchains = Blockchain.create [
   }
 ]
 
-channels = Channel.create [
+LastTrackedBlock.create blockchain_id: blockchains[0].id, last_tracked_block: 7_000_000
+LastTrackedBlock.create blockchain_id: blockchains[1].id, last_tracked_block: 500_000
+
+lanes = EvmLcmpLane.create [
   {
-    from_blockchain: blockchains[0],
-    to_blockchain: blockchains[1],
-    outbound_lane: '0x9B5010d562dDF969fbb85bC72222919B699b5F54',
-    inbound_lane: '0xB59a893f5115c1Ca737E36365302550074C32023'
+    src_blockchain: blockchains[0],
+    dst_blockchain: blockchains[1],
+    outbound_lane_address: '0x9B5010d562dDF969fbb85bC72222919B699b5F54'.downcase,
+    inbound_lane_address: '0xB59a893f5115c1Ca737E36365302550074C32023'.downcase
   },
   {
-    from_blockchain: blockchains[1],
-    to_blockchain: blockchains[0],
-    outbound_lane: '0xAbd165DE531d26c229F9E43747a8d683eAD54C6c',
-    inbound_lane: '0x0F6e081B1054c59559Cf162e82503F3f560cA4AF'
+    src_blockchain: blockchains[1],
+    dst_blockchain: blockchains[0],
+    outbound_lane_address: '0xAbd165DE531d26c229F9E43747a8d683eAD54C6c'.downcase,
+    inbound_lane_address: '0x0F6e081B1054c59559Cf162e82503F3f560cA4AF'.downcase 
   }
 ]
+
+channels = Channel.create [
+  {
+    src_blockchain: blockchains[0],
+    dst_blockchain: blockchains[1],
+    channelable_id: lanes[0].id,
+    channelable_type: 'EvmLcmpLane'
+  },
+  {
+    src_blockchain: blockchains[1],
+    dst_blockchain: blockchains[0],
+    channelable_id: lanes[1].id,
+    channelable_type: 'EvmLcmpLane' 
+  }
+]
+
