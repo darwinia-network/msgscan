@@ -51,6 +51,7 @@ class EvmLcmpLog < ApplicationRecord
         channel_id: channel.id,
         nonce: args['nonce'],
         sent_at: log_at,
+        src_transaction_hash: transaction_hash,
         sent_at_event_id: event.id,
         from_dapp: args['source'],
         to_dapp: args['target'],
@@ -62,7 +63,7 @@ class EvmLcmpLog < ApplicationRecord
     message = CrossChainMessage.find(result.first['id'])
     CrossChainMessageEvent.create(cross_chain_message_id: message.id, event_id: event.id)
 
-    CrossChainMessage.broadcast_to_frontend
+    message.broadcast_to_frontend
   end
 
   def process_message_dispatched(channel, event)
@@ -73,7 +74,8 @@ class EvmLcmpLog < ApplicationRecord
         channel_id: channel.id,
         nonce: args['nonce'],
         executed_at: log_at,
-        executed_at_event_id: event.id
+        executed_at_event_id: event.id,
+        dst_transaction_hash: transaction_hash
       },
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
     )

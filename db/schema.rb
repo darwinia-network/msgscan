@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_01_102236) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_033220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_102236) do
     t.integer "channel_id"
     t.datetime "confirmed_at", precision: nil
     t.integer "confirmed_at_event_id"
+    t.string "src_transaction_hash"
+    t.string "dst_transaction_hash"
     t.index ["src_blockchain_id", "dst_blockchain_id", "channel_id", "nonce"], name: "index_cross_chain_messages_on_src_and_dst_and_ch_and_nonce", unique: true
   end
 

@@ -1,8 +1,8 @@
-<%= turbo_stream_from "messages" %>
-<div class="input-group mb-4">
-  <input class="form-control" aria-label="Source Transaction Hash" aria-describedby="button-addon2" type="text" placeholder="tx hash">
-  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-</div>
-<turbo-frame id="messages">
-  <%= render 'messages', messages: @messages %>
-</turbo-frame>
+<main class="container">
+  <%= render 'message_search' %>
+  <%= turbo_frame_tag 'body' do %>
+    <%= turbo_frame_tag 'messages' do %>
+      <%= render 'messages', messages: @messages %>
+    <% end %>
+  <% end %>
+</main>
