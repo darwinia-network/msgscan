@@ -2,7 +2,7 @@
 <table class="table table-sm table-hover">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Time(UTC)</th>
       <th scope="col">Block</th>
       <th scope="col">From</th>
@@ -13,7 +13,7 @@
       <th scope="col">Dst Tx</th>
     </tr>
   </thead>
-  <tbody class="">
+  <tbody class="table-group-divider">
     <% messages.each do |message| %>
       <%= render 'messages/message', message: message %>
     <% end %>

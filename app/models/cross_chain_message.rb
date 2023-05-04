@@ -29,7 +29,7 @@ class CrossChainMessage < ApplicationRecord
     dst_transaction_hash
   end
 
-  def self.latest_messages(limit = 16)
+  def self.latest_messages(limit = 32)
     CrossChainMessage.includes(:src_chain, :dst_chain,
                                sent_at_event: :event_source).order(sent_at: :desc).limit(limit)
   end
