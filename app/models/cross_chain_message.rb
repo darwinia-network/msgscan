@@ -30,7 +30,8 @@ class CrossChainMessage < ApplicationRecord
   end
 
   def self.latest_messages(limit = 16)
-    CrossChainMessage.order(sent_at: :desc).limit(limit)
+    CrossChainMessage.includes(:src_chain, :dst_chain,
+                               sent_at_event: :event_source).order(sent_at: :desc).limit(limit)
   end
 
   def broadcast_to_frontend
