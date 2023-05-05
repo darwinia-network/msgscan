@@ -1,6 +1,6 @@
 <%= turbo_frame_tag 'message_search' do %>
   <div class="row justify-content-md-center">
-    <div class="mb-5 col-md-12">
+    <div class="mb-4 col-md-12">
       <%= form_with scope: :message, url: message_search_path, class: 'input-group' do |form| %>
         <%= form.text_field :tx_hash, type: 'text', 'required' => 'true', 'aria-describedby' => 'btn-search', 'placeholder' => "Transaction hash on the source chain", class: 'form-control border-1 bg-light border-secondary' %>
         <%= form.submit 'Search', 'id' => 'btn-search', 'class' => "btn btn-outline-secondary", data: { turbo_frame: "body" } %>
