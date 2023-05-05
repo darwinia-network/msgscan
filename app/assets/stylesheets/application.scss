@@ -3,4 +3,11 @@
 
 body {
   font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  // background: radial-gradient(circle at 10% 20%, rgb(242, 235, 243) 0%, rgb(234, 241, 249) 90.1%);
+  // background: radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.46) 0.1%, rgba(233, 226, 226, 0.28) 90.1%);
+}
+
+.btn {
+  border-radius: 0;
 }
