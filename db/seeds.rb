@@ -17,7 +17,7 @@ blockchains = Blockchain.create [
     name: 'pangolin',
     explorer: 'https://pangolin.subscan.io/',
     rpc: 'https://pangolin-rpc.darwinia.network',
-    blocks_per_scan: 20_000
+    blocks_per_scan: 10_000
   }
 ]
 
