@@ -9,8 +9,8 @@
       <th scope="col">To</th>
       <th scope="col">Nonce</th>
       <th scope="col">Status</th>
-      <th scope="col">Src Tx</th>
-      <th scope="col">Dst Tx</th>
+      <th scope="col" class="text-end">Src Tx</th>
+      <th scope="col" class="text-end">Dst Tx</th>
     </tr>
   </thead>
   <tbody class="table-group-divider">
@@ -23,8 +23,8 @@
         <td ><%= message.dst_chain.name %></td>
         <td ><%= message.nonce %></td>
         <td ><%= message.status_bar %></td>
-        <td ><%= message.src_transaction_hash&.truncate(15) || '-' %></td>
-        <td ><%= message.dst_transaction_hash&.truncate(15) || '-' %></td>
+        <td class="text-end" style="font-family: 'Roboto Mono', monospace; font-size: 13px"><%= message.src_transaction_hash&.truncate(15) || '-' %></td>
+        <td class="text-end" style="font-family: 'Roboto Mono', monospace; font-size: 13px"><%= message.dst_transaction_hash&.truncate(15) || '-' %></td>
       </tr>
     <% end %>
   </tbody>

@@ -7,15 +7,15 @@
     <%= csp_meta_tag %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Roboto&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <div class="col-lg-9 mx-auto p-4 py-md-5">
-      <header class="d-flex align-items-center pb-3 mb-3">
-        <a href="<%= messages_index_path %>" class="d-flex align-items-center text-dark text-decoration-none mx-auto">
-          <span class="fs-3">Darwinia Cross Chain Messages</span>
+    <div class="col-lg-9 mx-auto p-3 py-md-5">
+      <header class="d-flex pb-4 mb-3">
+        <a href="<%= messages_index_path %>" class="d-flex text-dark text-decoration-none mx-auto">
+          <span class="fs-3" style="font-family: 'Major Mono Display', monospace;">Darwinia Cross Chain Messages</span>
         </a>
       </header>
       <%= yield %>
