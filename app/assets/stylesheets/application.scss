@@ -4,41 +4,4 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  
-}
-
-.form-control {
-  border-radius: 0;
-}
-
-.page-link {
-  color: black;
-}
-
-.page-link:hover {
-  color: gray;
-}
-
-.active>.page-link {
-  background-color: black;
-  color: white;
-}
-
-.pagination>li>a, .pagination>li>span {
-  border-width: 0;
-  border-radius: 0;
-}
-
-.page-item:first-child .page-link {
-  border-width: 0;
-  border-radius: 0;
-}
-
-.page-item:last-child .page-link {
-  border-width: 0;
-  border-radius: 0;
-}
-
-.btn {
-  border-radius: 0;
 }
