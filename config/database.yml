@@ -85,5 +85,3 @@ test:
 production:
   <<: *default
   database: msgscan_production
-  username: msgscan
-  password: <%= ENV["MSGSCAN_DATABASE_PASSWORD"] %>
