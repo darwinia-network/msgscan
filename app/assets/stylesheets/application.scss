@@ -3,9 +3,20 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
+  background: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  background-attachment: fixed;
+  // font-family: 'Roboto Mono', monospace; 
   // background: radial-gradient(circle at 10% 20%, rgb(242, 235, 243) 0%, rgb(234, 241, 249) 90.1%);
   // background: radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.46) 0.1%, rgba(233, 226, 226, 0.28) 90.1%);
+}
+
+.list-group-item {
+  background-color: transparent;
+}
+
+* {
+  border-radius: 0!important;
 }
 
 .btn {
