@@ -31,10 +31,10 @@ class Init < ActiveRecord::Migration[7.0]
       t.integer "src_blockchain_id"
       t.integer "nonce"
       t.integer "status"
-      t.datetime "sent_at", precision: nil
-      t.integer "sent_at_event_id"
-      t.datetime "executed_at", precision: nil
-      t.integer "executed_at_event_id"
+      t.datetime "initiated_at", precision: nil
+      t.integer "initiated_at_event_id"
+      t.datetime "delivered_at", precision: nil
+      t.integer "delivered_at_event_id"
       t.text "execution_error"
       t.integer "execution_error_event_id"
       t.string "from_dapp"

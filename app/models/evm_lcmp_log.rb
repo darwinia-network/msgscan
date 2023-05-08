@@ -50,9 +50,9 @@ class EvmLcmpLog < ApplicationRecord
         dst_blockchain_id: channel.get_peer_blockchain_id(blockchain_id),
         channel_id: channel.id,
         nonce: args['nonce'],
-        sent_at: log_at,
+        initiated_at: log_at,
         src_transaction_hash: transaction_hash,
-        sent_at_event_id: event.id,
+        initiated_at_event_id: event.id,
         from_dapp: args['source'],
         to_dapp: args['target'],
         payload: args['encoded'] # TODO: decode the real message
@@ -73,8 +73,8 @@ class EvmLcmpLog < ApplicationRecord
         dst_blockchain_id: blockchain_id,
         channel_id: channel.id,
         nonce: args['nonce'],
-        executed_at: log_at,
-        executed_at_event_id: event.id,
+        delivered_at: log_at,
+        delivered_at_event_id: event.id,
         dst_transaction_hash: transaction_hash
       },
       unique_by: %i[src_blockchain_id dst_blockchain_id channel_id nonce]
