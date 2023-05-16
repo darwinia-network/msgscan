@@ -1,5 +1,5 @@
 # Darwinia Messages Explorer
 
-1. docker-compose run web ./bin/build.sh
-
+0. docker-compose run --rm -e EDITOR=vim web rails credentials:edit
+1. docker-compose run --rm web ./bin/build.sh
 2. docker-compose up

@@ -1,7 +1,7 @@
 FROM ruby:3.1
 
 # Dependencies
-RUN apt-get update -qq && apt-get install -y cron postgresql-client
+RUN apt-get update -qq && apt-get install -y cron postgresql-client vim
 
 # Node
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - &&apt-get install -y nodejs
