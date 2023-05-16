@@ -34,6 +34,7 @@ services:
       - .:/usr/src/app
     depends_on:
       - db
+      - web
   scan_pangolin_lcmp_logs:
     build: .
     env_file:
@@ -43,6 +44,7 @@ services:
       - .:/usr/src/app
     depends_on:
       - db
+      - web
 
 volumes:
   redis:
