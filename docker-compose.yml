@@ -1,50 +1,56 @@
 version: "3"
+
 services:
-  db:
-    image: postgres
+  msgscan-db:
+    container_name: msgscan-db
+    image: postgres:14-alpine
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres:/var/lib/postgresql/data
-  redis:
-    image: redis
+    env_file:
+      - .env
+
+  msgscan-redis:
+    container_name: msgscan-redis
+    image: redis:7-alpine
     command: redis-server
     volumes:
       - redis:/data
-  web:
+
+  msgscan-web:
+    container_name: msgscan-web
     build: .
     env_file:
       - .env
-    command: ./bin/start.sh
-    volumes:
-      - .:/usr/src/app
+    command: bin/start.sh
     ports:
-      - "3000:3000"
+      - 127.0.0.1:4300:3000
     depends_on:
-      - db
-      - redis
-    environment:
-      - REDIS_URL_CACHING=redis://redis:6379/0
-  scan_goerli_lcmp_logs:
+      - msgscan-db
+      - msgscan-redis
+
+  msgscan-goerli-lcmp-logs:
+    container_name: msgscan-goerli-lcmp-logs
     build: .
     env_file:
       - .env
     command: /bin/bash -c "bundle exec rails goerli_pangolin_lcmp:scan_events_of_goerli"
-    volumes:
-      - .:/usr/src/app
     depends_on:
-      - db
-      - web
-  scan_pangolin_lcmp_logs:
+      - msgscan-db
+      - msgscan-web
+    restart: unless-stopped
+
+  msgscan-pangolin-lcmp-logs:
+    container_name: msgscan-pangolin-lcmp-logs
     build: .
     env_file:
       - .env
     command: /bin/bash -c "bundle exec rails goerli_pangolin_lcmp:scan_events_of_pangolin"
-    volumes:
-      - .:/usr/src/app
     depends_on:
-      - db
-      - web
+      - msgscan-db
+      - msgscan-web
+    restart: unless-stopped
 
 volumes:
   redis:
