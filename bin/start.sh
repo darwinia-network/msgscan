@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# exit on error
-set -o errexit
+
+set -e
+
+if [ -f tmp/pids/server.pid ]; then
+  rm tmp/pids/server.pid
+fi
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 bundle config --global frozen 1
